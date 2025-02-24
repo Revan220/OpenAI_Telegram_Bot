@@ -4,13 +4,13 @@ import numpy as np
 import tiktoken
 import asyncio
 from openai import AsyncOpenAI
-from config import openai_api_key
+from config import openai_api_key, my_json_file
 
 # Подключаем OpenAI (асинхронный клиент)
 client = AsyncOpenAI(api_key=openai_api_key)
 
 # Загружаем JSON-файл
-with open("latoken_all_data.json", "r", encoding="utf-8") as f:
+with open(my_json_file, "r", encoding="utf-8") as f:
     data = json.load(f)
 
 # Функция разбиения текста на чанки (500 токенов)

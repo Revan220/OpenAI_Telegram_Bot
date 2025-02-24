@@ -8,7 +8,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 from openai import OpenAI
-from config import openai_api_key, telegram_token
+from config import openai_api_key, telegram_token, ai_bot_prompt, starter_answer
 
 # Подключаем OpenAI
 client = OpenAI(api_key=openai_api_key)
@@ -49,7 +49,7 @@ async def ask_assistant(user_id, user_msg):
 
     # Формируем полный контекст с историей
     messages = [
-        {"role": "system", "content": "Ты ассистент компании LATOKEN. Отвечай на вопросы кратко и четко, используя информацию из контекста. Стиль ответа подстраивай под пользователя. Если вопрос сложный, разбей ответ на пункты. После ответа задай осмысленный вопрос по теме, чтобы проверить понимание. Вопрос должен быть связан с ответом и заставлять пользователя думать. Если ответ пользователя неясный, уточни, что он имел в виду.."},
+        {"role": "system", "content": ai_bot_prompt},
         {"role": "user", "content": f"Контекст: {context}"}
     ] + user_histories[user_id]
 
@@ -68,7 +68,7 @@ async def ask_assistant(user_id, user_msg):
 # Обработчик команды /start
 @dp.message(CommandStart())
 async def start_cmd(message: Message):
-    await message.answer("Привет! Я ассистент компании Latoken. Задавай вопросы.")
+    await message.answer(starter_answer)
 
 # Обработчик входящих сообщений
 @dp.message()
